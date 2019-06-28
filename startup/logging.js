@@ -1,6 +1,6 @@
 import winston from "winston";
 
-export default () => {
+export default function() {
 	winston.add(
 		new winston.transports.Console({
 			colorize: true,
@@ -9,4 +9,4 @@ export default () => {
 		})
 	);
 	winston.format.combine(winston.format.colorize(), winston.format.json());
-};
+}
