@@ -2,11 +2,11 @@
   "name": "eternal-api-v1",
   "version": "1.0.0",
   "description": "Eternal jewelry store API",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "setup": "node -r esm tools/setupDb.js",
-    "start": "nodemon -r esm app.js",
-    "debug": "node -r esm --nolazy --inspect-brk app.js"
+    "start": "nodemon -r esm index.js",
+    "debug": "node -r esm --nolazy --inspect-brk index.js"
   },
   "repository": {
     "type": "git",
@@ -23,9 +23,10 @@
   },
   "homepage": "https://github.com/Smokov/eternal-api-v1#readme",
   "dependencies": {
+    "@hapi/joi": "^15.1.0",
     "esm": "3.2.25",
     "express": "^4.17.1",
-    "mongoose": "^5.6.0",
+    "mongoose": "^5.6.2",
     "winston": "^3.2.1"
   },
   "devDependencies": {

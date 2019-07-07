@@ -1,7 +1,9 @@
 import winston from "winston";
 
-export default function(err, req, res, next) {
-	winston.error(err.message, err);
+export default function(error, req, res, next) {
+	winston.error(error);
 
-	res.status(500).send("An error has ocurred.");
+	const { statusCode, message, errors } = error;
+
+	res.status(statusCode || 500).json({ message, errors });
 }
