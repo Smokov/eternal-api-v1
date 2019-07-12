@@ -24,6 +24,7 @@
   "homepage": "https://github.com/Smokov/eternal-api-v1#readme",
   "dependencies": {
     "@hapi/joi": "^15.1.0",
+    "bcrypt": "^3.0.6",
     "esm": "3.2.25",
     "express": "^4.17.1",
     "mongoose": "^5.6.2",

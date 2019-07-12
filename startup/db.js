@@ -22,6 +22,7 @@ export default async () => {
 	try {
 		await mongoose.connect(settings.DB_URL, {
 			useNewUrlParser: true,
+			useCreateIndex: true,
 			autoReconnect: true,
 			reconnectTries: 3600,
 			reconnectInterval: 1000
