@@ -47,15 +47,22 @@ export const Customer = model(
 		addresses: {
 			type: [
 				{
-					address: { type: String, minlength: 20, maxlength: 255 },
-					city: { type: String },
-					state: { type: String },
+					address: {
+						type: String,
+						minlength: 20,
+						maxlength: 255,
+						required: true
+					},
+					city: { type: String, required: true },
+					state: { type: String, required: true },
 					district: { type: String },
-					zipcode: { type: String }
+					zipcode: { type: String, required: true }
 				}
 			],
 			required: [true, "O endereço deve ser informado."]
 		},
+		total_spent: { type: Number },
+		orders_count: { type: Number },
 		group_id: {
 			type: Schema.Types.ObjectId
 		}
@@ -64,16 +71,7 @@ export const Customer = model(
 
 export function validate(customer) {
 	const schema = {
-		user_id: Joi.object({
-			email: Joi.string()
-				.email({ minDomainSegments: 2 })
-				.required(),
-			password: Joi.string()
-				.min(5)
-				.max(1024)
-				.required(),
-			isAdmin: Joi.boolean().required()
-		}),
+		user_id: Joi.objectId(),
 		full_name: Joi.string()
 			.min(5)
 			.max(50)
@@ -84,19 +82,27 @@ export function validate(customer) {
 			.required(),
 		cpf: Joi.string()
 			.regex(/^[0-9]{11}$/)
-			.required(),
+			.without("cnpj"),
+		//.when("cnpj",{is:Joi.exist(),then: Joi.required()}),
+		cnpj: Joi.string()
+			.regex(/^[0-9]{14}$/)
+			.without("cpf"),
 		phone: Joi.string()
 			.min(8)
 			.max(20)
 			.required(),
-		addresses: Joi.array().items({
-			address: Joi.string().required(),
-			address: { type: String, minlength: 20, maxlength: 255 },
-			city: { type: String },
-			state: { type: String },
-			district: { type: String },
-			zipcode: { type: String }
-		}),
+		addresses: Joi.array()
+			.items({
+				address: Joi.string()
+					.min(20)
+					.max(255)
+					.required(),
+				city: Joi.string().required(),
+				state: Joi.string().required(),
+				district: Joi.string(),
+				zipcode: Joi.string().regex(/^[0-9]{5}-[0-9]{3}$/)
+			})
+			.required(),
 		group_id: Joi.objectId()
 	};
 

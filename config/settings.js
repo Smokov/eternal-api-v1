@@ -11,4 +11,8 @@ const PORT = process.env.PORT || 3001;
 const DB_URL =
 	process.env.DB_URL || `mongodb://${dbCred}${dbHost}:${dbPort}/${dbName}`;
 
-export default { PORT, DB_URL };
+const JWT_PRIVATE_KEY = process.env.JWT_PRIVATE_KEY || "mySecretKey";
+const AUTH_DOMAIN = process.env.AUTH_DOMAIN || "localhost"; // eternaljoias.auth0.com
+const AUTH_AUDIENCE = process.env.AUTH_AUDIENCE || "http://localhost:3001";
+
+export default { PORT, DB_URL, JWT_PRIVATE_KEY, AUTH_DOMAIN, AUTH_AUDIENCE };

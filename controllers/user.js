@@ -4,21 +4,22 @@ import bcrypt from "bcrypt";
 class UserController {
 	constructor() {}
 
-	async authenticate(req, res, next) {
+	async get(req, res, next) {
 		try {
-			const user = await User.findOne({ email: req.params.email });
-			res.send(user);
+			const query = {};
+			if (req.query.email) query.email = req.query.email;
+			if (req.query.roles) query.roles = { $all: req.query.roles };
+			const users = await User.find(query).select("-hash");
+			res.send(users);
 		} catch (error) {
 			next(error);
 		}
 	}
 
-	async getByEmail(req, res, next) {
+	async getById(req, res, next) {
 		try {
-			const user = await User.findOne({ email: req.params.email });
-
+			const user = await User.findById(req.params.id).select("-hash");
 			if (!user) return res.status(404).send("Usuário não encontrado.");
-
 			res.send(user);
 		} catch (error) {
 			next(error);
@@ -30,18 +31,19 @@ class UserController {
 			const { error } = validate(req.body);
 			if (error) return res.status(400).send(error.details[0].message);
 
-			let user = await User.findOne({ email: req.body.email });
+			const { email, password, roles } = req.body;
+
+			let user = await User.findOne({ email: email });
 			if (user) return res.status(400).send("Usuário já registrado.");
 
-			user = new User({
-				email: req.body.email,
-				password: req.body.password,
-				isAdmin: false,
-				active: true
-			});
-
 			const salt = await bcrypt.genSalt(10);
-			user.password = await bcrypt.hash(user.password, salt);
+			const hash = await bcrypt.hash(password, salt);
+
+			user = new User({
+				email: email,
+				hash: hash,
+				roles: roles
+			});
 
 			user = await user.save();
 
@@ -56,12 +58,16 @@ class UserController {
 			const { error } = validate(req.body);
 			if (error) return res.status(400).send(error.details[0].message);
 
+			const { email, password } = req.body;
+
+			const salt = await bcrypt.genSalt(10);
+			const hash = await bcrypt.hash(password, salt);
+
 			const user = await User.findByIdAndUpdate(
 				req.params.id,
 				{
-					email: req.body.email,
-					password: req.body.password,
-					active: req.body.active
+					email: email,
+					hash: hash
 				},
 				{ new: true }
 			);
