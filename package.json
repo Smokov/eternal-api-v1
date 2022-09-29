@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/Smokov/eternal-api-v1#readme",
   "dependencies": {
-    "@hapi/joi": "^15.1.0",
+    "@hapi/joi": "^15.1.1",
     "bcrypt": "^3.0.6",
     "esm": "3.2.25",
     "express": "^4.17.1",
